@@ -15,13 +15,16 @@
 </script>
 
 <style lang="scss">
-  @use 'scss/variables';
+  @use 'scss/variables' as *;
 
   body {
-    font-family: variables.$default-font;
-    background-color: variables.$dark;
+    margin: 8px;
+    padding: 0px;
+
+    font-family: $default-font;
+    background-color: $dark;
   }
   #app {
-    
+
   }
 </style>
