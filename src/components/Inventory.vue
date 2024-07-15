@@ -24,9 +24,9 @@
             :position="pos" :item />
     </div>
 
-    <div class="some-cont">
+    <div ref="someCont" class="some-cont">
       <div class="placeholder"></div>
-      <div class="close-button">
+      <div class="close-button" @click="closeClickHandler">
         <svg>
           <path d="M12 1.05L10.95 0L6 4.95L1.05 0L0 1.05L4.95 6L0 10.95L1.05 12L6 7.05L10.95 12L12 10.95L7.05 6L12 1.05Z" fill="white"/>
         </svg>
@@ -36,10 +36,17 @@
 </template>
 
 <script setup lang="ts">
+  import { ref } from 'vue';
   import { useInventoryStore } from '../stores/inventory';
   import Cell from '../components/Cell.vue';
 
   const inventory = useInventoryStore();
+
+  const someCont = ref<HTMLDivElement>();
+
+  const closeClickHandler = () => {
+    someCont.value?.remove();
+  };
 </script>
 
 <style scoped lang="scss">
@@ -157,6 +164,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
+      cursor: pointer;
 
       > svg {
         width: 12px;
