@@ -20,7 +20,8 @@
     </div>
 
     <div class="grid-cont">
-
+      <Cell v-for="(item, pos) in inventory.itemsDisplay" :key="item?.id"
+            :position="pos" :item />
     </div>
 
     <div class="some-cont">
@@ -34,26 +35,22 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue';
+<script setup lang="ts">
+  import { useInventoryStore } from '../stores/inventory';
+  import Cell from '../components/Cell.vue';
 
-  export default defineComponent({
-    name: 'Inventory',
-    /*props: {
-      
-    }*/
-  });
+  const inventory = useInventoryStore();
 </script>
 
 <style scoped lang="scss">
   @use '../scss/variables' as *;
 
   .cont {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto 1fr;
     gap: $gap;
     margin: 32px;
-    width: 790px;
+    width: 777px;
     height: fit-content;
 
     > div {
@@ -64,6 +61,9 @@
   }
 
   .image-cont {
+    grid-column: 1;
+    grid-row: 1;
+
     padding: $content-padding;
 
     .img-cont {
@@ -113,12 +113,29 @@
   }
   
   .grid-cont {
+    grid-column: 2;
+    grid-row: 1;
 
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    overflow: hidden;
+    height: calc(100% - 1px);
+
+    > div {
+      width: 100px;
+      height: 100px;
+      border-left: 1px solid $border-color;
+      border-top: 1px solid $border-color;
+      translate: -1px -1px;
+    }
   }
 
   .some-cont {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+
     padding: $content-padding;
-    width: 100%;
     display: flex;
     position: relative;
 

@@ -2,16 +2,8 @@
   <Inventory />
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue';
+<script setup lang="ts">
   import Inventory from './components/Inventory.vue';
-
-  export default defineComponent({
-    name: 'App',
-    components: {
-      Inventory
-    }
-  });
 </script>
 
 <style lang="scss">
