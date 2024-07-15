@@ -15,10 +15,13 @@
 </script>
 
 <style lang="scss">
+  @use 'scss/variables';
+
+  body {
+    font-family: variables.$default-font;
+    background-color: variables.$dark;
+  }
   #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
+    
   }
 </style>
