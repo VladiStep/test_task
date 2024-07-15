@@ -18,7 +18,7 @@
   @use 'scss/variables' as *;
 
   body {
-    margin: 8px;
+    margin: 0px;
     padding: 0px;
 
     font-family: $default-font;
