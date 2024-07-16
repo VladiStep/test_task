@@ -17,21 +17,21 @@ export const useInventoryStore = defineStore('inventory', {
         id: 0,
         name: "Предмет 1",
         description: "Это предмет 1.",
-        iconName: "item1.png",
+        iconName: "item1",
         quantity: 4
       }],
       [1, {
         id: 1,
         name: "Предмет 2",
         description: "Это предмет 2.",
-        iconName: "item2.png",
+        iconName: "item2",
         quantity: 2
       }],
       [2, {
         id: 2,
         name: "Предмет 3",
         description: "Это предмет 3.",
-        iconName: "item3.png",
+        iconName: "item3",
         quantity: 5
       }]
     ])

@@ -19,4 +19,9 @@
   #app {
 
   }
+
+  @font-face {
+    font-family: Inter;
+    src: url("@/fonts/Inter-Regular.ttf");
+  }
 </style>
