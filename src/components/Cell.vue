@@ -1,9 +1,11 @@
 <template>
   <div class="cell-cont" :data-isNotEmpty="isNotEmpty"
-       @click="isNotEmpty ? clickHandler : null">
-    <img v-if="isNotEmpty" class="icon" :src="getImgUrl(`${item?.iconName}_54px.png`)" />
+       @click="isNotEmpty ? clickHandler : null"
+       draggable="true">
+    <img v-if="isNotEmpty" class="icon" draggable="false"
+         :src="getImgUrl(`${item?.iconName}_54px.png`)" />
 
-    <div v-if="isNotEmpty" class="quantity-cont">
+    <div v-if="isNotEmpty" class="quantity-cont" draggable="false">
       <div class="quantity-label">{{ item?.quantity }}</div>
     </div>
   </div>

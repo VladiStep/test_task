@@ -44,6 +44,9 @@
 
   const someCont = ref<HTMLDivElement>();
 
+  /*const cellDragImage = new HTMLDivElement();
+  cellDragImage.className = 'cell-image';*/
+
   const closeClickHandler = () => {
     someCont.value?.remove();
   };
@@ -61,7 +64,7 @@
     height: fit-content;
 
     > div {
-      box-shadow: inset 0 0 0 1px $border-color;
+      box-shadow: inset 0 0 0 $border-width $border-color;
       border-radius: $main-radius;
       background-color: $light-dark;
     }
@@ -127,15 +130,21 @@
     flex-wrap: wrap;
     box-sizing: border-box;
     overflow: hidden;
-    padding: 1px 0px 0px 1px;
-    width: 506px;
+    padding: $border-width 0px 0px $border-width;
+    width: ($cell-size + 1px) * 5 + 1px;
 
     > div {
-      width: 100px;
-      height: 100px;
-      border: 1px solid $border-color;
-      margin: -1px 0px 0px -1px;
+      width: $cell-size;
+      height: $cell-size;
+      border: $border-width solid $border-color;
+      margin-top: -$border-width;
+      margin-left: -$border-width;
     }
+  }
+  .cell-image {
+    background-color: $light-dark;
+    border: $border-width solid $border-color;
+    border-radius: $cell-image-radius;
   }
 
   .some-cont {
