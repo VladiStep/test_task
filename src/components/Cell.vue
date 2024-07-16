@@ -1,16 +1,16 @@
 <template>
-  <div class="cell-cont">
-    <img v-if="item !== undefined"
-         class="icon" :src="getImgUrl(`${item?.iconName}_54px.png`)" />
+  <div class="cell-cont" :data-isNotEmpty="isNotEmpty"
+       @click="isNotEmpty ? clickHandler : null">
+    <img v-if="isNotEmpty" class="icon" :src="getImgUrl(`${item?.iconName}_54px.png`)" />
 
-    <div v-if="item !== undefined" class="quantity-cont">
+    <div v-if="isNotEmpty" class="quantity-cont">
       <div class="quantity-label">{{ item?.quantity }}</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { PropType } from 'vue';
+  import { computed, PropType } from 'vue';
   import { IItem } from '../stores/inventory';
 
   const props = defineProps({
@@ -18,11 +18,17 @@
     item: Object as PropType<IItem>
   });
 
+  const isNotEmpty = computed(() => props.item !== undefined);
+
   const getImgUrl = (name: string | undefined) => {
     if (name === undefined) return "";
 
     return require('../assets/' + name);
   }
+
+  const clickHandler = (ev: MouseEvent) => {
+    
+  };
 </script>
 
 <style scoped lang="scss">
@@ -33,6 +39,14 @@
     align-items: center;
     justify-content: center;
     position: relative;
+
+    &[data-isNotEmpty=true] {
+      cursor: pointer;
+
+      &:hover {
+        background-color: $light-dark-hover;
+      }
+    }
   }
 
   .icon {
