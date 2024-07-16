@@ -57,11 +57,11 @@
     grid-template-columns: auto 1fr;
     gap: $gap;
     margin: 32px;
-    width: 777px;
+    width: fit-content;
     height: fit-content;
 
     > div {
-      border: 1px solid $border-color;
+      box-shadow: inset 0 0 0 1px $border-color;
       border-radius: $main-radius;
       background-color: $light-dark;
     }
@@ -127,14 +127,14 @@
     flex-wrap: wrap;
     box-sizing: border-box;
     overflow: hidden;
-    height: calc(100% - 1px);
+    padding: 1px 0px 0px 1px;
+    width: 506px;
 
     > div {
       width: 100px;
       height: 100px;
-      border-left: 1px solid $border-color;
-      border-top: 1px solid $border-color;
-      translate: -1px -1px;
+      border: 1px solid $border-color;
+      margin: -1px 0px 0px -1px;
     }
   }
 
