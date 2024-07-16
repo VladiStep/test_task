@@ -1,8 +1,11 @@
 <template>
   <div class="cell-cont">
-    <img class="icon" :src="getImgUrl(item?.iconName)" />
+    <img v-if="item !== undefined"
+         class="icon" :src="getImgUrl(`${item?.iconName}_54px.png`)" />
 
-    <div class="quantity-cont"></div>
+    <div v-if="item !== undefined" class="quantity-cont">
+      <div class="quantity-label">{{ item?.quantity }}</div>
+    </div>
   </div>
 </template>
 
@@ -23,10 +26,13 @@
 </script>
 
 <style scoped lang="scss">
+  @use '../scss/variables' as *;
+
   .cell-cont {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
   }
 
   .icon {
@@ -35,6 +41,28 @@
   }
 
   .quantity-cont {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+
+    width: 16px;
+    height: 16px;
+
+    border-color: $border-color;
+    border-style: solid;
+    border-width: 1px 0px 0px 1px;
+    border-top-left-radius: 6px;
+    box-sizing: border-box;
+
+    .quantity-label {
+      font-family: Inter;
+      font-size: 10px;
+      color: #7d7d7d;
+      font-weight: 500;
+    }
   }
 </style>
