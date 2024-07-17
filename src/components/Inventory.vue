@@ -21,9 +21,7 @@
 
     <div class="grid-cont">
       <Cell v-for="(item, pos) in inventory.itemsDisplay" :key="item?.id"
-            :position="pos" :item
-            @dragstart="cellDragStartHandler($event, pos, item?.iconName)"
-            @dragend="cellDragEndHandler" />
+            :position="pos" :item="item" />
     </div>
     <div ref="cellDragImage" class="cell-drag-image">
       <img ref="cellDragImageImg" />
@@ -41,8 +39,8 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { useInventoryStore } from '../stores/inventory';
+  import { onMounted, ref } from 'vue';
+  import { IItem, useInventoryStore } from '../stores/inventory';
   import Cell from '../components/Cell.vue';
   //import styleVars from '../scss/_variables.module.scss';
 
@@ -51,29 +49,18 @@
 
   const someCont = ref<HTMLDivElement>();
 
-  //#region Cells drag&drop
   const cellDragImage = ref<HTMLDivElement>();
   const cellDragImageImg = ref<HTMLImageElement>();
-
-  const cellDragStartHandler = (ev: DragEvent, itemPos: number, itemIconName: string | undefined) => {
-    if (ev.dataTransfer === null || itemIconName === undefined
-        || cellDragImage.value === undefined || cellDragImageImg.value === undefined) {
-      return;
-    }
-
-    const mousePos = { x: ev.offsetX, y: ev.offsetY };
-    cellDragImageImg.value.src = getImgUrl(`${itemIconName}_small.png`);
-    ev.dataTransfer.setDragImage(cellDragImage.value, mousePos.x, mousePos.y);
-    ev.dataTransfer.setData('text/plain', itemPos.toString());
-  };
-  const cellDragEndHandler = (ev: DragEvent) => {
-    if (ev.dataTransfer === null) return;
-  };
-  //#endregion
 
   const closeClickHandler = () => {
     someCont.value?.remove();
   };
+
+  onMounted(() => {
+    // Make the elements available in `Cell`
+    inventory.cellDragImage = cellDragImage.value;
+    inventory.cellDragImageImg = cellDragImageImg.value;
+  });
 </script>
 
 <style scoped lang="scss">

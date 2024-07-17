@@ -1,31 +1,89 @@
 <template>
   <div class="cell-cont" :data-isNotEmpty="isNotEmpty"
-       @click="isNotEmpty ? clickHandler : null"
+       v-on="isNotEmpty ? cellEvents : {}"
+       @dragover="dragOverHandler" @drop="dropHandler"
        :draggable="isNotEmpty">
     <img v-if="isNotEmpty" class="icon" draggable="false"
          :src="getImgUrl(`${item?.iconName}_small.png`)" />
 
     <div v-if="isNotEmpty" class="quantity-cont" draggable="false">
-      <div class="quantity-label">{{ item?.quantity }}</div>
+      <div class="quantity-label">{{ item?.quantity ?? 0 }}</div>
     </div>
   </div>
 </template>
 
+<script lang="ts">
+  let srcCellPos: number | null = null;
+</script>
+
 <script setup lang="ts">
   import { computed, PropType } from 'vue';
   import { useInventoryStore, IItem } from '../stores/inventory';
+  import { storeToRefs } from 'pinia';
 
-  const { getImgUrl } = useInventoryStore();
+  const inventory = useInventoryStore();
+  const { getImgUrl } = inventory;
+  const { cellDragImage, cellDragImageImg } = storeToRefs(inventory);
 
   const props = defineProps({
-    position: Number,
-    item: Object as PropType<IItem>
+    position: {
+      type: Number,
+      required: true
+    },
+    item: {
+      type: Object as PropType<IItem>,
+      required: false
+    }
   });
+
+  const emit = defineEmits<{
+    'click': [itemPos: number]
+  }>();
 
   const isNotEmpty = computed(() => props.item !== undefined);
 
   const clickHandler = (ev: MouseEvent) => {
     
+  };
+
+  //#region Drag&drop
+  const dragStartHandler = (ev: DragEvent) => {
+    if (ev.dataTransfer === null || props.item?.iconName === undefined
+        || cellDragImage.value === undefined || cellDragImageImg.value === undefined) {
+      return;
+    }
+
+    const mousePos = { x: ev.offsetX, y: ev.offsetY };
+    cellDragImageImg.value.src = getImgUrl(`${props.item.iconName}_small.png`);
+    ev.dataTransfer.setDragImage(cellDragImage.value, mousePos.x, mousePos.y);
+    ev.dataTransfer.effectAllowed = "move";
+    srcCellPos = props.position;
+  };
+  const dragEndHandler = (ev: DragEvent) => {
+    if (ev.dataTransfer === null) return;
+
+    srcCellPos = null;
+  };
+
+  const dragOverHandler = (ev: DragEvent) => {
+    if (srcCellPos === null) {
+      if (ev.dataTransfer !== null)
+        ev.dataTransfer.dropEffect = "none";
+    }
+    else if (srcCellPos !== props.position)
+      ev.preventDefault();
+  };
+
+  const dropHandler = (ev: DragEvent) => {
+    if (srcCellPos !== null)
+      inventory.moveItem(srcCellPos, props.position);
+  };
+  //#endregion
+
+  const cellEvents = {
+    click: clickHandler,
+    dragstart: dragStartHandler,
+    dragend: dragEndHandler
   };
 </script>
 
@@ -44,6 +102,10 @@
       &:hover {
         background-color: $light-dark-hover;
       }
+    }
+
+    > * {
+      pointer-events: none; // fixes invalid drag icon at the edge/border
     }
   }
 
