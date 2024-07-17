@@ -76,6 +76,12 @@ export const useInventoryStore = defineStore('inventory', {
 
       this.items.delete(srcPos);
       this.items.set(destPos, item);
+    },
+
+    getImgUrl(name: string | undefined) {
+      if (name === undefined) return "";
+  
+      return require('../assets/' + name);
     }
   },
   persist: true

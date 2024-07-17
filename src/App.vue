@@ -7,7 +7,7 @@
 </script>
 
 <style lang="scss">
-  @use 'scss/variables' as *;
+  @use 'scss/variables.module' as *;
 
   body {
     margin: 0px;

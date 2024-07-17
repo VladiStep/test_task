@@ -1,9 +1,9 @@
 <template>
   <div class="cell-cont" :data-isNotEmpty="isNotEmpty"
        @click="isNotEmpty ? clickHandler : null"
-       draggable="true">
+       :draggable="isNotEmpty">
     <img v-if="isNotEmpty" class="icon" draggable="false"
-         :src="getImgUrl(`${item?.iconName}_54px.png`)" />
+         :src="getImgUrl(`${item?.iconName}_small.png`)" />
 
     <div v-if="isNotEmpty" class="quantity-cont" draggable="false">
       <div class="quantity-label">{{ item?.quantity }}</div>
@@ -13,7 +13,9 @@
 
 <script setup lang="ts">
   import { computed, PropType } from 'vue';
-  import { IItem } from '../stores/inventory';
+  import { useInventoryStore, IItem } from '../stores/inventory';
+
+  const { getImgUrl } = useInventoryStore();
 
   const props = defineProps({
     position: Number,
@@ -22,19 +24,13 @@
 
   const isNotEmpty = computed(() => props.item !== undefined);
 
-  const getImgUrl = (name: string | undefined) => {
-    if (name === undefined) return "";
-
-    return require('../assets/' + name);
-  }
-
   const clickHandler = (ev: MouseEvent) => {
     
   };
 </script>
 
 <style scoped lang="scss">
-  @use '../scss/variables' as *;
+  @use '../scss/variables.module' as *;
 
   .cell-cont {
     display: flex;
@@ -52,8 +48,8 @@
   }
 
   .icon {
-    width: 54px;
-    height: 54px;
+    width: $cell-image-size;
+    height: $cell-image-size;
   }
 
   .quantity-cont {

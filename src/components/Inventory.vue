@@ -21,7 +21,12 @@
 
     <div class="grid-cont">
       <Cell v-for="(item, pos) in inventory.itemsDisplay" :key="item?.id"
-            :position="pos" :item />
+            :position="pos" :item
+            @dragstart="cellDragStartHandler($event, pos, item?.iconName)"
+            @dragend="cellDragEndHandler" />
+    </div>
+    <div ref="cellDragImage" class="cell-drag-image">
+      <img ref="cellDragImageImg" />
     </div>
 
     <div ref="someCont" class="some-cont">
@@ -39,13 +44,32 @@
   import { ref } from 'vue';
   import { useInventoryStore } from '../stores/inventory';
   import Cell from '../components/Cell.vue';
+  //import styleVars from '../scss/_variables.module.scss';
 
   const inventory = useInventoryStore();
+  const { getImgUrl } = inventory;
 
   const someCont = ref<HTMLDivElement>();
 
-  /*const cellDragImage = new HTMLDivElement();
-  cellDragImage.className = 'cell-image';*/
+  //#region Cells drag&drop
+  const cellDragImage = ref<HTMLDivElement>();
+  const cellDragImageImg = ref<HTMLImageElement>();
+
+  const cellDragStartHandler = (ev: DragEvent, itemPos: number, itemIconName: string | undefined) => {
+    if (ev.dataTransfer === null || itemIconName === undefined
+        || cellDragImage.value === undefined || cellDragImageImg.value === undefined) {
+      return;
+    }
+
+    const mousePos = { x: ev.offsetX, y: ev.offsetY };
+    cellDragImageImg.value.src = getImgUrl(`${itemIconName}_small.png`);
+    ev.dataTransfer.setDragImage(cellDragImage.value, mousePos.x, mousePos.y);
+    ev.dataTransfer.setData('text/plain', itemPos.toString());
+  };
+  const cellDragEndHandler = (ev: DragEvent) => {
+    if (ev.dataTransfer === null) return;
+  };
+  //#endregion
 
   const closeClickHandler = () => {
     someCont.value?.remove();
@@ -53,7 +77,7 @@
 </script>
 
 <style scoped lang="scss">
-  @use '../scss/variables' as *;
+  @use '../scss/variables.module' as *;
 
   .cont {
     display: grid;
@@ -141,10 +165,20 @@
       margin-left: -$border-width;
     }
   }
-  .cell-image {
+  .cell-drag-image {
     background-color: $light-dark;
     border: $border-width solid $border-color;
     border-radius: $cell-image-radius;
+    width: $cell-size;
+    height: $cell-size;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    left: -999px;
+    top: -999px;
   }
 
   .some-cont {

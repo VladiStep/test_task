@@ -12,3 +12,8 @@ $cell-image-radius: 24px;
 $skeleton-gradient: linear-gradient(to right, #3c3c3c, #444444, #333333);
 $content-padding: 18px;
 $cell-size: 100px;
+$cell-image-size: 54px;
+
+:export {
+  cellImageSize: $cell-image-size;
+}
